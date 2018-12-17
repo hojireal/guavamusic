@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">芭乐音乐</string>
+    <string name="title_activity_music_main">芭乐音乐</string>
+
+    <string name="nav_header_title">芭乐音乐</string>
+    <string name="nav_header_desc">侧边栏头部</string>
+    <string name="navigation_drawer_open">打开侧边栏</string>
+    <string name="navigation_drawer_close">关闭侧边栏</string>
+
+    <string name="fragment_content_my">我的</string>
+    <string name="fragment_content_music_hall">音乐馆</string>
+    <string name="fragment_content_discovery">发现</string>
+
+    <string name="action_settings">设置</string>
+</resources>
