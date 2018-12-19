@@ -1,7 +1,6 @@
 package com.houjie.music.guavamusicplayer.utils;
 
 public class Log {
-    public static boolean DEBUG = false;
     private static final String TAG_PREFIX = "HJMP_";
     private static final int TAG_PREFIX_LENGTH = TAG_PREFIX.length();
     private static final int MAX_TAG_LENGTH = 23;
@@ -46,7 +45,7 @@ public class Log {
     }
 
     private static void log(String tag, int level, Throwable t, Object... messages) {
-        if (!android.util.Log.isLoggable(tag, level) && !DEBUG) {
+        if (!android.util.Log.isLoggable(tag, level)) {
             return;
         }
 
