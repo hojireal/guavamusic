@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.crypto.spec.OAEPParameterSpec;
-
 public class SkinAssetsLoader extends SkinStorageLoader {
     @Override
     protected String getSkinPath(Context context, String skinName) {
@@ -28,7 +26,7 @@ public class SkinAssetsLoader extends SkinStorageLoader {
             OutputStream os = new FileOutputStream(skinPath);
             int byteCount;
             byte[] bytes = new byte[1024];
-            while((byteCount = is.read(bytes)) != -1) {
+            while ((byteCount = is.read(bytes)) != -1) {
                 os.write(bytes, 0, byteCount);
             }
             os.close();

@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.houjie.design.skin.support.SkinCompatManager.SkinLoaderStrategy;
+import com.houjie.design.skin.support.content.res.SkinCompatResources;
 import com.houjie.design.skin.support.utils.SkinFileUtils;
 import com.houjie.design.skin.support.utils.SkinPkgUtils;
 
@@ -22,7 +23,12 @@ public abstract class SkinStorageLoader implements SkinLoaderStrategy {
             String pkgName = SkinPkgUtils.getSkinPackageName(context, skinPkgPath);
             Resources res = SkinPkgUtils.getSkinResource(context, skinPkgPath);
             if (null != res && !TextUtils.isEmpty(pkgName)) {
-
+                SkinCompatResources.getInstance().setupSkin(
+                        res,
+                        pkgName,
+                        skinName,
+                        this);
+                return skinName;
             }
         }
         return null;

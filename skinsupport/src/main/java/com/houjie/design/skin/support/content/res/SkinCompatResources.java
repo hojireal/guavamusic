@@ -1,10 +1,11 @@
 package com.houjie.design.skin.support.content.res;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 
 import com.houjie.design.skin.support.SkinCompatManager;
-import com.houjie.design.skin.support.load.SkinStorageLoader;
+import com.houjie.design.skin.support.SkinCompatManager.SkinLoaderStrategy;
 
 public class SkinCompatResources {
     private static SkinCompatResources sInstance;
@@ -12,7 +13,7 @@ public class SkinCompatResources {
     private Resources mResources;
     private String mSkinName = "";
     private String mSkinPkgName = "";
-    private SkinCompatManager.SkinLoaderStrategy mStrategy;
+    private SkinLoaderStrategy mStrategy;
     private boolean isDefaultSkin = true;
 
     private SkinCompatResources() {}
@@ -24,21 +25,22 @@ public class SkinCompatResources {
         return sInstance;
     }
 
-
     public void reset() {
-        reset();
+        reset(SkinCompatManager.getInstance().getStrategies().get(SkinCompatManager.SKIN_LOADER_STRATEGY_NONE));
     }
 
-    public void reset(SkinCompatManager.SkinLoaderStrategy strategy) {
+    public void reset(SkinLoaderStrategy strategy) {
         mResources = SkinCompatManager.getInstance().getContext().getResources();
         mSkinName = "";
         mSkinPkgName = "";
         mStrategy = strategy;
         isDefaultSkin = true;
+        SkinCompatUserThemeManager.getInstance().clearCaches();
+        SkinCompatDrawableManager.getInstance().clearCaches();
     }
 
     public void setupSkin(Resources resources, String pkgName,
-                          String skinName, SkinStorageLoader strategy) {
+                          String skinName, SkinLoaderStrategy strategy) {
         if (null == resources || TextUtils.isEmpty(pkgName) || TextUtils.isEmpty(skinName)) {
             reset(strategy);
             return;
@@ -48,7 +50,29 @@ public class SkinCompatResources {
         mSkinName = skinName;
         mStrategy = strategy;
         isDefaultSkin = false;
-        Ski
+        SkinCompatUserThemeManager.getInstance().clearCaches();
+        SkinCompatDrawableManager.getInstance().clearCaches();
+    }
 
+    public Resources getSkinResources() {
+        return mResources;
+    }
+
+    public String getSkinPkgName() {
+        return mSkinPkgName;
+    }
+
+    public boolean isDefaultSkin() {
+        return isDefaultSkin;
+    }
+
+    public static int getColor(Context context, int resId) {
+        return getInstance().getSkinColor(context, resId);
+    }
+
+    private int getSkinColor(Context context, int resId) {
+        if (!SkinCompatUserThemeManager) {
+
+        }
     }
 }

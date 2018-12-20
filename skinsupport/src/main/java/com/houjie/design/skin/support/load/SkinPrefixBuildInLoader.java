@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 
+import com.houjie.design.skin.support.SkinCompatManager;
 import com.houjie.design.skin.support.SkinCompatManager.SkinLoaderStrategy;
 import com.houjie.design.skin.support.content.res.SkinCompatResources;
 
-public class SkinBuildInLoader implements SkinLoaderStrategy {
+public class SkinPrefixBuildInLoader implements SkinLoaderStrategy {
     @Override
     public String loadSkinInBackground(Context context, String skinName) {
         SkinCompatResources.getInstance().setupSkin(
@@ -20,7 +21,7 @@ public class SkinBuildInLoader implements SkinLoaderStrategy {
 
     @Override
     public String getTargetResourceEntryName(Context context, String skinName, int resId) {
-        return context.getResources().getResourceEntryName(resId) + "_" + skinName;
+        return skinName + "_" + context.getResources().getResourceEntryName(resId);
     }
 
     @Override
@@ -40,6 +41,6 @@ public class SkinBuildInLoader implements SkinLoaderStrategy {
 
     @Override
     public int getType() {
-        return 0;
+        return SkinCompatManager.SKIN_LOADER_STRATEGY_PREFIX_BUILD_IN;
     }
 }
