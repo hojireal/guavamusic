@@ -1,6 +1,5 @@
 package com.houjie.design.skin.support;
 
-import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -11,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.SparseArray;
 
 import com.houjie.design.skin.support.app.SkinActivityLifecycle;
@@ -52,23 +52,6 @@ public class SkinCompatManager extends SkinObservable {
     private boolean mSkinStatusBarColorEnable = false;
     private boolean mSkinWindowBackgroundColorEnable = true;
 
-    private SkinCompatManager(Context context) {
-        mAppContext = context.getApplicationContext();
-        initLoaderStrategy();
-    }
-
-    private static SkinCompatManager init(Context context) {
-        if (null == sInstance) {
-            synchronized (SkinCompatManager.class) {
-                if (null == sInstance) {
-                    sInstance = new SkinCompatManager(context);
-                }
-            }
-        }
-        SkinPreference.init(context);
-        return sInstance;
-    }
-
     public static SkinCompatManager getInstance() {
         return sInstance;
     }
@@ -83,6 +66,23 @@ public class SkinCompatManager extends SkinObservable {
         init(application);
         SkinActivityLifecycle.init(application);
         return sInstance;
+    }
+
+    private static SkinCompatManager init(Context context) {
+        if (null == sInstance) {
+            synchronized (SkinCompatManager.class) {
+                if (null == sInstance) {
+                    sInstance = new SkinCompatManager(context);
+                }
+            }
+        }
+        SkinPreference.init(context);
+        return sInstance;
+    }
+
+    private SkinCompatManager(Context context) {
+        mAppContext = context.getApplicationContext();
+        initLoaderStrategy();
     }
 
     private void initLoaderStrategy() {
@@ -114,7 +114,7 @@ public class SkinCompatManager extends SkinObservable {
     /**
      * 自定义View换肤时，可选择添加一个{@link SkinLayoutInflater}
      *
-     * @param inflater 在{@link com.houjie.design.skin.support.app.SkinLayoutInflater#createView(Context, String, String)}方法中调用。
+     * @param inflater 在{@link com.houjie.design.skin.support.app.SkinCompatViewInflater#createView(Context, String, String)}方法中调用。
      * @return
      */
     public SkinCompatManager addInflater(SkinLayoutInflater inflater) {
@@ -129,7 +129,7 @@ public class SkinCompatManager extends SkinObservable {
     /**
      * 自定义View换肤时，可选择添加一个{@link SkinLayoutInflater}
      *
-     * @param inflater 在{@link com.houjie.design.skin.support.app.SkinLayoutInflater#createView(Context, String, String)}方法中最先调用.
+     * @param inflater 在{@link com.houjie.design.skin.support.app.SkinCompatViewInflater#createView(Context, String, String)}方法中最先调用.
      * @return
      */
     public SkinCompatManager addHookInflater(SkinLayoutInflater inflater) {
@@ -190,7 +190,7 @@ public class SkinCompatManager extends SkinObservable {
         return this;
     }
 
-    public boolean isSkinWindowBackgroundColorEnable() {
+    public boolean isSkinWindowBackgroundEnable() {
         return mSkinWindowBackgroundColorEnable;
     }
 

@@ -1,6 +1,7 @@
 package com.houjie.design.skin.support.content.res;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.text.TextUtils;
 
@@ -71,8 +72,70 @@ public class SkinCompatResources {
     }
 
     private int getSkinColor(Context context, int resId) {
-        if (!SkinCompatUserThemeManager) {
+        if (!SkinCompatUserThemeManager.getInstance().isColorEmpty()) {
+            ColorStateList colorStateList = SkinCompatUserThemeManager
+                    .getInstance().getColorStateList(resId);
+            if (null != colorStateList) {
+                return colorStateList.getDefaultColor();
+            }
+        }
+        if (null != mStrategy) {
+            ColorStateList colorStateList = mStrategy.getColor(context, mSkinName, resId);
+            if (null != colorStateList) {
+                return colorStateList.getDefaultColor();
+            }
+        }
+        if (!isDefaultSkin) {
+            int targetResId = getTargetResId(context, resId);
+            if (0 != targetResId) {
+                return mResources.getColor(targetResId);
+            }
+        }
+        return context.getResources().getColor(resId);
+    }
 
+    private int getTargetResId(Context context, int resId) {
+        try {
+            String resName = null;
+            if (null != mStrategy) {
+                resName = mStrategy.getTargetResourceEntryName(context, mSkinName, resId);
+            }
+            if (TextUtils.isEmpty(resName)) {
+                resName = context.getResources().getResourceEntryName(resId);
+            }
+            String type = context.getResources().getResourceTypeName(resId);
+            return mResources.getIdentifier(resName, type, mSkinPkgName);
+        } catch (Exception e) {
+            return 0;
         }
     }
+
+    public static ColorStateList getColorStateList(Context context, int resId) {
+        return getInstance().getSkinColorStateList(context, resId);
+    }
+
+    private ColorStateList getSkinColorStateList(Context context, int resId) {
+        if (!SkinCompatUserThemeManager.getInstance().isColorEmpty()) {
+            ColorStateList colorStateList = SkinCompatUserThemeManager
+                    .getInstance().getColorStateList(resId);
+            if (null != colorStateList) {
+                return colorStateList;
+            }
+        }
+        if (null != mStrategy) {
+            ColorStateList colorStateList = mStrategy.getColorStateList(context, mSkinName, resId);
+            if (null != colorStateList) {
+                return colorStateList;
+            }
+        }
+        if (!isDefaultSkin) {
+            int targetResId = getTargetResId(context, resId);
+            if (0 != targetResId) {
+                return mResources.getColorStateList(targetResId);
+            }
+        }
+        return context.getResources().getColorStateList(resId);
+    }
+
+
 }
