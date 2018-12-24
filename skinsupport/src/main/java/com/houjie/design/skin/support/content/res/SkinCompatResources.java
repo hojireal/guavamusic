@@ -3,7 +3,12 @@ package com.houjie.design.skin.support.content.res;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.AnyRes;
 import android.text.TextUtils;
+import android.util.TypedValue;
 
 import com.houjie.design.skin.support.SkinCompatManager;
 import com.houjie.design.skin.support.SkinCompatManager.SkinLoaderStrategy;
@@ -137,5 +142,64 @@ public class SkinCompatResources {
         return context.getResources().getColorStateList(resId);
     }
 
+    public static void getValue(Context context, @AnyRes int resId, TypedValue outValue, boolean resolveRefs) {
+        getInstance().getSkinValue(context, resId, outValue, resolveRefs);
+    }
 
+    private void getSkinValue(Context context, @AnyRes int resId, TypedValue outValue, boolean resolveRefs) {
+        if (!isDefaultSkin) {
+            int targetResId = getTargetResId(context, resId);
+            if (targetResId != 0) {
+                mResources.getValue(targetResId, outValue, resolveRefs);
+                return;
+            }
+        }
+        context.getResources().getValue(resId, outValue, resolveRefs);
+    }
+
+    public static XmlResourceParser getXml(Context context, int resId) {
+        return getInstance().getSkinXml(context, resId);
+    }
+
+    private XmlResourceParser getSkinXml(Context context, int resId) {
+        if (!isDefaultSkin) {
+            int targetResId = getTargetResId(context, resId);
+            if (targetResId != 0) {
+                return mResources.getXml(targetResId);
+            }
+        }
+        return context.getResources().getXml(resId);
+    }
+
+    public static Drawable getDrawable(Context context, int resId) {
+        return getInstance().getSkinDrawable(context, resId);
+    }
+
+    private Drawable getSkinDrawable(Context context, int resId) {
+        if (!SkinCompatUserThemeManager.getInstance().isColorEmpty()) {
+            ColorStateList colorStateList = SkinCompatUserThemeManager.getInstance().getColorStateList(resId);
+            if (colorStateList != null) {
+                return new ColorDrawable(colorStateList.getDefaultColor());
+            }
+        }
+        if (!SkinCompatUserThemeManager.getInstance().isDrawableEmpty()) {
+            Drawable drawable = SkinCompatUserThemeManager.getInstance().getDrawable(resId);
+            if (drawable != null) {
+                return drawable;
+            }
+        }
+        if (mStrategy != null) {
+            Drawable drawable = mStrategy.getDrawable(context, mSkinName, resId);
+            if (drawable != null) {
+                return drawable;
+            }
+        }
+        if (!isDefaultSkin) {
+            int targetResId = getTargetResId(context, resId);
+            if (targetResId != 0) {
+                return mResources.getDrawable(targetResId);
+            }
+        }
+        return context.getResources().getDrawable(resId);
+    }
 }

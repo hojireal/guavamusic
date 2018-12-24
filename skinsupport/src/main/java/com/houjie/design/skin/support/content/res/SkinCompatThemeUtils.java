@@ -9,6 +9,8 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.graphics.ColorUtils;
 import android.util.TypedValue;
 
+import static com.houjie.design.skin.support.widget.SkinCompatHelper.INVALID_ID;
+
 public class SkinCompatThemeUtils {
     private static final ThreadLocal<TypedValue> TL_TYPED_VALUE = new ThreadLocal<>();
 
@@ -131,4 +133,6 @@ public class SkinCompatThemeUtils {
         final int originalAlpha = Color.alpha(color);
         return ColorUtils.setAlphaComponent(color, Math.round(originalAlpha * alpha));
     }
+
+
 }
